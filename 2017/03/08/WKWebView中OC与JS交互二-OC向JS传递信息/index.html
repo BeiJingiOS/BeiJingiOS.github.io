@@ -1,0 +1,813 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="云随笔" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#x80CC;&amp;#x666F;&amp;#x5728;&amp;#x9879;&amp;#x76EE;&amp;#x4E2D;&amp;#xFF0C;&amp;#x9047;&amp;#x5230;&amp;#x4E86;&amp;#x9700;&amp;#x8981;OC&amp;#x4E0E;JS&amp;#x4EA4;&amp;#x6362;&amp;#x7684;&amp;#x573A;&amp;#x666F;&amp;#xFF0C;&amp;#x9879;&amp;#x76EE;&amp;#x4E2D;&amp;#x7684;webView&amp;#x4E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WKWebView中OC与JS交互二-OC向JS传递信息">
+<meta property="og:url" content="http://yoursite.com/2017/03/08/WKWebView中OC与JS交互二-OC向JS传递信息/index.html">
+<meta property="og:site_name" content="云随笔">
+<meta property="og:description" content="&amp;#x80CC;&amp;#x666F;&amp;#x5728;&amp;#x9879;&amp;#x76EE;&amp;#x4E2D;&amp;#xFF0C;&amp;#x9047;&amp;#x5230;&amp;#x4E86;&amp;#x9700;&amp;#x8981;OC&amp;#x4E0E;JS&amp;#x4EA4;&amp;#x6362;&amp;#x7684;&amp;#x573A;&amp;#x666F;&amp;#xFF0C;&amp;#x9879;&amp;#x76EE;&amp;#x4E2D;&amp;#x7684;webView&amp;#x4E">
+<meta property="og:image" content="http://yoursite.com/2017/03/08/WKWebView中OC与JS交互二-OC向JS传递信息/OCtojs1.gif">
+<meta property="og:updated_time" content="2017-03-08T09:19:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WKWebView中OC与JS交互二-OC向JS传递信息">
+<meta name="twitter:description" content="&amp;#x80CC;&amp;#x666F;&amp;#x5728;&amp;#x9879;&amp;#x76EE;&amp;#x4E2D;&amp;#xFF0C;&amp;#x9047;&amp;#x5230;&amp;#x4E86;&amp;#x9700;&amp;#x8981;OC&amp;#x4E0E;JS&amp;#x4EA4;&amp;#x6362;&amp;#x7684;&amp;#x573A;&amp;#x666F;&amp;#xFF0C;&amp;#x9879;&amp;#x76EE;&amp;#x4E2D;&amp;#x7684;webView&amp;#x4E">
+<meta name="twitter:image" content="http://yoursite.com/2017/03/08/WKWebView中OC与JS交互二-OC向JS传递信息/OCtojs1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> WKWebView中OC与JS交互二-OC向JS传递信息 | 云随笔 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1dbbe6d4dfb79b8ddac19df707932ba";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云随笔</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                WKWebView中OC与JS交互二-OC向JS传递信息
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-08T17:16:52+08:00" content="2017-03-08">
+              2017-03-08
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="&#x80CC;&#x666F;"><a href="#&#x80CC;&#x666F;" class="headerlink" title="&#x80CC;&#x666F;"></a>&#x80CC;&#x666F;</h2><p>&#x5728;&#x9879;&#x76EE;&#x4E2D;&#xFF0C;&#x9047;&#x5230;&#x4E86;&#x9700;&#x8981;OC&#x4E0E;JS&#x4EA4;&#x6362;&#x7684;&#x573A;&#x666F;&#xFF0C;&#x9879;&#x76EE;&#x4E2D;&#x7684;webView&#x4E0D;&#x662F;&#x4F20;&#x7EDF;&#x7684;<a href="https://developer.apple.com/reference/uikit/uiwebview" target="_blank" rel="external">UIWebView</a>&#xFF0C;&#x800C;&#x8981;&#x662F;iOS 8&#x4EE5;&#x540E;&#x51FA;&#x73B0;&#x7684;<a href="https://developer.apple.com/reference/webkit/wkwebview" target="_blank" rel="external">WKWebView</a>&#xFF0C;WKWebView&#x7684;&#x4F7F;&#x7528;&#x4E0E;UIWebView&#x7684;&#x4F7F;&#x7528;&#x7565;&#x6709;&#x4E0D;&#x540C;&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x672C;&#x4E91;&#x5728;&#x6B64;&#x7B80;&#x5355;&#x8BB0;&#x5F55;&#xFF0C;&#x5982;&#x4F55;&#x5728;WKWebView&#x4E2D;&#xFF0C;OC&#x5411;JS&#x4F20;&#x9012;&#x6D88;&#x606F;&#xFF0C;&#x7B80;&#x5355;&#x6765;&#x8BF4;&#xFF0C;&#x5C31;&#x662F;&#x5982;&#x4F55;&#x70B9;&#x51FB;&#x539F;&#x751F;&#x9875;&#x9762;&#x7684;&#x6309;&#x94AE;&#xFF0C;&#x5411;js&#x4F20;&#x9012;&#x6D88;&#x606F;</p>
+<a id="more"></a>
+<h2 id="&#x5177;&#x4F53;&#x6B65;&#x9AA4;"><a href="#&#x5177;&#x4F53;&#x6B65;&#x9AA4;" class="headerlink" title="&#x5177;&#x4F53;&#x6B65;&#x9AA4;"></a>&#x5177;&#x4F53;&#x6B65;&#x9AA4;</h2><h3 id="&#x672C;&#x4E91;&#x7684;&#x672C;&#x5730;html-test-html-&#x5982;&#x4E0B;"><a href="#&#x672C;&#x4E91;&#x7684;&#x672C;&#x5730;html-test-html-&#x5982;&#x4E0B;" class="headerlink" title="&#x672C;&#x4E91;&#x7684;&#x672C;&#x5730;html(test.html)&#x5982;&#x4E0B;"></a>&#x672C;&#x4E91;&#x7684;&#x672C;&#x5730;html(test.html)&#x5982;&#x4E0B;</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">   &lt;script type =&quot;text/javascript&quot; &gt;</div><div class="line">    function getNativeMsg(src)</div><div class="line">    {</div><div class="line">       document.getElementById(&quot;Mytr&quot;).value=src;</div><div class="line">    }</div><div class="line">    </div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    </div><div class="line">&lt;textarea id =&quot;Mytr&quot; type=&quot;value&quot; style=&quot;width:100%;height:400px;left:0px;top:0px&quot;&gt;&#x6D4B;&#x8BD5;&lt;/textarea&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>&#x5728;test.html&#x4E2D;&#xFF0C;&#x672C;&#x4E91;&#x901A;&#x8FC7;&#x8BBE;&#x7F6E;&#x4E00;&#x4E2A;&#x6587;&#x672C;&#x663E;&#x793A;&#x533A;(textarea)&#x6765;&#x663E;&#x793A;&#x4FE1;&#x606F;(&#x9ED8;&#x8BA4;&#x4E3A;&#x201D;&#x6D4B;&#x8BD5;&#x201D;)&#xFF0C;&#x7136;&#x540E;&#x5728;js&#x91CC;&#x8BBE;&#x7F6E;&#x4E86;&#x4E00;&#x4E2A;&#x51FD;&#x6570;<code>getNativeMsg</code>&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x5229;&#x7528;<code>document.getElementById</code>&#x5F97;&#x5230;&#x6587;&#x672C;&#x663E;&#x793A;&#x533A;&#xFF0C;&#x7136;&#x540E;&#xFF0C;&#x901A;&#x8FC7;&#x51FD;&#x6570;&#x4F20;&#x7684;&#x503C;&#xFF0C;&#x6765;&#x6539;&#x53D8;&#x6587;&#x672C;&#x533A;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;&#xFF0C;&#x5219;&#x662F;&#x901A;&#x8FC7;OC&#x4F20;&#x9012;&#x7684;&#x3002;</p>
+<h3 id="&#x672C;&#x4E91;&#x7684;iOS&#x9879;&#x76EE;&#x5DE5;&#x7A0B;&#x7684;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x5982;&#x4E0B;"><a href="#&#x672C;&#x4E91;&#x7684;iOS&#x9879;&#x76EE;&#x5DE5;&#x7A0B;&#x7684;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x5982;&#x4E0B;" class="headerlink" title="&#x672C;&#x4E91;&#x7684;iOS&#x9879;&#x76EE;&#x5DE5;&#x7A0B;&#x7684;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x5982;&#x4E0B;"></a>&#x672C;&#x4E91;&#x7684;iOS&#x9879;&#x76EE;&#x5DE5;&#x7A0B;&#x7684;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x5982;&#x4E0B;</h3><p>&#x5728;&#x9879;&#x76EE;&#x4E2D;&#xFF0C;&#x5BFC;&#x5165;WebKit.framework&#xFF0C;&#x5728;&#x9700;&#x8981;&#x5C55;&#x793A;web&#x9875;&#x7684;.m&#x6587;&#x4EF6;&#x4E2D;&#xFF0C;&#x5F15;&#x5165;&#x5934;&#x6587;&#x4EF6;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#import &lt;WebKit/WebKit.h&gt;</div></pre></td></tr></table></figure>
+<p>&#x5728;viewDidLoad&#x65B9;&#x6CD5;&#x91CC;&#xFF0C;&#x4EE3;&#x7801;&#x5982;&#x4E0B;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">//&#x51C6;&#x5907;&#x6D4F;&#x89C8;&#x5668;</div><div class="line">    self.webView=({</div><div class="line">        //JS&#x4EA4;&#x4E92;&#x76F8;&#x5173;&#x7684;&#x914D;&#x7F6E;</div><div class="line">        WKWebViewConfiguration *config=[[WKWebViewConfiguration alloc]init];</div><div class="line">        //&#x5141;&#x8BB8;&#x6267;&#x884C;js</div><div class="line">        config.preferences=[[WKPreferences alloc]init];</div><div class="line">        config.preferences.javaScriptEnabled=YES;</div><div class="line">        //&#x8BBE;&#x7F6E;userController</div><div class="line">        WKUserContentController *controller=[[WKUserContentController alloc]init];</div><div class="line">        config.userContentController=controller;</div><div class="line">        WKWebView *webView=[[WKWebView alloc]initWithFrame:CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/2) configuration:config];</div><div class="line">        webView;</div><div class="line">        </div><div class="line">    });</div><div class="line">    [self.view addSubview:self.webView];</div><div class="line">    //&#x52A0;&#x8F7D;&#x9875;&#x9762;</div><div class="line">    NSString *filePath=[[NSBundle mainBundle]pathForResource:@&quot;test&quot; ofType:@&quot;html&quot;];</div><div class="line">    NSString *htmlString=[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];</div><div class="line">    [self.webView loadHTMLString:htmlString baseURL:nil];</div><div class="line">    //&#x51C6;&#x5907;&#x6309;&#x94AE;</div><div class="line">    UIButton *btn=[UIButton buttonWithType:UIButtonTypeSystem];</div><div class="line">    btn.frame=CGRectMake(0, [UIScreen mainScreen].bounds.size.height/2+50, [UIScreen mainScreen].bounds.size.width, 30);</div><div class="line">    [btn setTitle:@&quot;&#x5F00;&#x59CB;&#x53D1;&#x6D88;&#x606F;&quot; forState:UIControlStateNormal];</div><div class="line">    [btn addTarget:self action:@selector(btnClicked) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">    [self.view addSubview:btn];</div></pre></td></tr></table></figure>
+<p>&#x5728;&#x4E0A;&#x8FF0;&#x4EE3;&#x7801;&#x4E2D;&#xFF0C;&#x9996;&#x5148;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;<a href="https://developer.apple.com/reference/webkit/wkwebviewconfiguration" target="_blank" rel="external">WKWebViewConfiguration</a>&#xFF0C;&#x7528;&#x6765;&#x8BBE;&#x7F6E;webView&#x76F8;&#x5173;&#x7684;&#x5C5E;&#x6027;&#xFF0C;&#x7136;&#x540E;&#xFF0C;&#x521B;&#x5EFA;<a href="https://developer.apple.com/reference/webkit/wkusercontentcontroller" target="_blank" rel="external">WKUserContentController</a>&#x6765;&#x5904;&#x7406;OC&#x4E0E;JS&#x4EA4;&#x4E92;&#xFF0C;&#x518D;&#x7136;&#x540E;&#xFF0C;&#x83B7;&#x53D6;&#x672C;&#x5730;HTML&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x5E76;&#x7528;WebView&#x52A0;&#x8F7D;</p>
+<p>&#x6309;&#x94AE;&#x7684;&#x54CD;&#x5E94;&#x4E8B;&#x4EF6;&#x5982;&#x4E0B;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-(void)btnClicked</div><div class="line">{</div><div class="line">    [self.webView evaluateJavaScript:@&quot;getNativeMsg(\&apos;&#x4F60;&#x597D;&#xFF0C;&#x81EA;&#x7531;&#x7684;&#x6D6E;&#x4E91;\&apos;)&quot; completionHandler:^(id _Nullable msg, NSError * _Nullable error) {</div><div class="line">    }];</div><div class="line">}</div></pre></td></tr></table></figure></p>
+<p>&#x5728;&#x6309;&#x94AE;&#x54CD;&#x5E94;&#x4E8B;&#x4EF6;&#x4E2D;&#xFF0C;&#x901A;&#x8FC7;<code>evaluateJavaScript: completionHandler:^(id _Nullable msg, NSError * _Nullable error)</code>&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x6267;&#x884C;js&#xFF0C;&#x8FBE;&#x5230;OC&#x5411;JS&#x4F20;&#x9012;&#x6D88;&#x606F;&#x7684;&#x76EE;&#x7684;&#xFF0C;&#x5176;&#x4E2D;&#xFF0C;<code>getNativeMsg</code>&#x662F;JS&#x4E2D;&#x5BF9;&#x5E94;&#x7684;&#x51FD;&#x6570;&#x7684;&#x540D;&#x79F0;&#xFF0C;&#x540E;&#x9762;&#x5219;&#x662F;&#x4F20;&#x9012;&#x7684;&#x6D88;&#x606F;,&#x6700;&#x7EC8;&#x6548;&#x679C;&#x5982;&#x56FE;</p>
+<p><img src="/2017/03/08/WKWebView&#x4E2D;OC&#x4E0E;JS&#x4EA4;&#x4E92;&#x4E8C;-OC&#x5411;JS&#x4F20;&#x9012;&#x4FE1;&#x606F;/OCtojs1.gif" alt=""></p>
+<p>&#x53E6;&#x5916;&#xFF0C;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;<code>WKUIDelegate</code>&#x4E2D;&#x7684;<code>- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler</code>&#x3001;<code>- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler</code>&#x548C;<code>- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable result))completionHandler</code>&#x6765;&#x62E6;&#x622A;HTML&#x7684;alert</p>
+<h2 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h2><p>&#x672C;&#x4E91;&#x5728;&#x6B64;&#x7B80;&#x5355;&#x5730;&#x5C55;&#x793A;&#x4E86;&#x5982;&#x4F55;&#x7528;WKWebView&#x52A0;&#x8F7D;&#x672C;&#x5730;HTML&#xFF0C;&#x4EE5;&#x53CA;&#x7B80;&#x5355;&#x7684;js&#x4E0E;OC&#x4EA4;&#x4E92;&#xFF0C;&#x7531;&#x4E8E;&#x672C;&#x4E91;&#x80FD;&#x529B;&#x6709;&#x9650;&#xFF0C;&#x4E0A;&#x8FF0;&#x5185;&#x5BB9;&#x96BE;&#x514D;&#x4F1A;&#x6709;&#x8C2C;&#x8BEF;&#xFF0C;&#x5FD8;&#x5404;&#x4F4D;&#x5927;&#x795E;&#x4E0D;&#x541D;&#x8D50;&#x6559;&#xFF0C;&#x6B22;&#x8FCE;&#x5404;&#x4F4D;&#x6765;&#x7838;&#x573A;&#x5B50;&#xFF0C;&#x672C;&#x4E91;&#x4E0D;&#x80DC;&#x611F;&#x6FC0;</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/18/WKWebView中OC与JS交互一-JS向OC传递信息/" rel="next" title="WKWebView中OC与JS交互一-JS向OC传递信息">
+                <i class="fa fa-chevron-left"></i> WKWebView中OC与JS交互一-JS向OC传递信息
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui-button -mob-share-open">分享</div>
+<div class="-mob-share-ui -mob-share-ui-theme -mob-share-ui-theme-slide-top " style="display: none">
+	<ul class="-mob-share-list">
+		<li class="-mob-share-weibo"><p>新浪微博</p></li>
+		<li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+		<li class="-mob-share-qzone"><p>QQ空间</p></li>
+		<li class="-mob-share-qq"><p>QQ好友</p></li>
+		<li class="-mob-share-weixin"><p>微信</p></li>
+		<li class="-mob-share-douban"><p>豆瓣</p></li>
+		<li class="-mob-share-renren"><p>人人网</p></li>
+		<li class="-mob-share-kaixin"><p>开心网</p></li>
+		<li class="-mob-share-facebook"><p>Facebook</p></li>
+		<li class="-mob-share-twitter"><p>Twitter</p></li>
+		<li class="-mob-share-pocket"><p>Pocket</p></li>
+		<li class="-mob-share-google"><p>Google+</p></li>
+		<li class="-mob-share-youdao"><p>有道云笔记</p></li>
+		<li class="-mob-share-mingdao"><p>明道</p></li>
+		<li class="-mob-share-pengyou"><p>朋友网</p></li>
+		<li class="-mob-share-tumblr"><p>Tumblr</p></li>
+		<li class="-mob-share-instapaper"><p>Instapaper</p></li>
+		<li class="-mob-share-linkedin"><p>LinkedIn</p></li>
+	</ul>
+	<div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=1aa86413dcc8e"></script>
+<!--MOB SHARE END-->
+
+
+<!--
+
+
+-->
+
+       
+
+
+
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="自由的浮云" />
+          <p class="site-author-name" itemprop="name">自由的浮云</p>
+          <p class="site-description motion-element" itemprop="description">本站记录的是自由的浮云在工作生活中的一些随笔，包括但不限于iOS开发等相关技术，如有任何疑问或者是需要讨论的地方，请邮件联系本云：1224159647@qq.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BeiJingiOS" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体步骤"><span class="nav-number">2.</span> <span class="nav-text">具体步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本云的本地html-test-html-如下"><span class="nav-number">2.1.</span> <span class="nav-text">本云的本地html(test.html)如下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本云的iOS项目工程的相关代码如下"><span class="nav-number">2.2.</span> <span class="nav-text">本云的iOS项目工程的相关代码如下</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">自由的浮云</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

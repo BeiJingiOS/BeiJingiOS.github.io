@@ -1,0 +1,38 @@
+language: node_js
+node_js: stable
+cache:
+  directories:
+    - node_modules
+
+# S: Build Lifecycle
+install:
+  - npm install
+
+
+#before_script:
+ # - npm install -g gulp
+
+script:
+  - hexo clean && hexo g
+
+after_script:
+  - git clone https://${GH_REF} .deploy_git
+  - cd .deploy_git
+  - git checkout master
+  - cd ../
+  - mv .deploy_git/.git/ ./public/
+  - cd ./public
+  - git init
+  - git config user.name "BeiJingiOS"
+  - git config user.email "BeiJingiOS@163.com"
+  - git add .
+  - git commit -m ":memo:\ Update docs by CI"
+  - git push --force --quiet "https://${9871f504be4f301b5d5ebf24ae11803fa454d55f}@${GH_REF}" master:master // CI_TOKEN为上一步在github上生成的Token。
+# E: Build LifeCycle
+
+branches:
+  only:
+    - source
+env:
+ global:
+   - GH_REF: github.com/palmerye/palmerye.github.io.git

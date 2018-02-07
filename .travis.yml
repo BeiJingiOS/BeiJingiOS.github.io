@@ -16,7 +16,7 @@ script:
   - hexo clean && hexo g
 
 after_script:
-  - git clone https://${GH_REF} .deploy_git
+  - git clone https://github.com/BeiJingiOS/BeiJingiOS.github.io/tree/source
   - cd .deploy_git
   - git checkout master
   - cd ../
@@ -27,7 +27,7 @@ after_script:
   - git config user.email "BeiJingiOS@163.com"
   - git add .
   - git commit -m ":memo:\ Update docs by CI"
-  - git push --force --quiet "https://${9871f504be4f301b5d5ebf24ae11803fa454d55f}@${GH_REF}" master:master // CI_TOKEN为上一步在github上生成的Token。
+  - git push --force --quiet "https://${9871f504be4f301b5d5ebf24ae11803fa454d55f}@${https://github.com/BeiJingiOS/BeiJingiOS.github.io/tree/source}" master:master // CI_TOKEN为上一步在github上生成的Token。
 # E: Build LifeCycle
 
 branches:
